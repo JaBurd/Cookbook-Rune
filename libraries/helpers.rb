@@ -53,6 +53,21 @@ class Chef
           end
         end
 
+        # Updates Artifactory connection configuration
+        # for API calls with existing xml object
+        #
+        # @param [File] target
+        # location of xml file descriptor to upload
+
+        def update_rune_config
+          if client.exists?
+            new_config = Artifactory::Client.new(endpoint: @new_resource.endpoint, username: @new_resource.username, password: @new_resource.password, ssl_pem_file: @new_resource.ssl_pem_file, ssl_verify: @new_resource.ssl_verify)
+            client = new_config
+          else
+            puts "client does not exist use runeconfig"
+          end
+        end
+
       # The following method is a placeholder. Once the requirement of
       # a full installation of the gem is required. Which, is very likely.
 
