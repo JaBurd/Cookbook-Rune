@@ -13,9 +13,25 @@ require 'chef/provider/lwrp_base'
 require_relative 'helpers'
 require 'artifactory'
 
-include Artifactory::Resource
-actions :configure, :nothing
+class Chef
+  class Provider
+    class RuneConfig < Chef::Provider::LWRPBase
+      include Artifactory::Resource
+      include Rune::Helpers
 
-  action :config do
-    config_rune_deploy
+      def whyrun_supported?
+        true
+      end
+
+      action :config do
+        converge_by("Configure #{ @new_resource.artifact }") do
+          # Configure client xml from helpers.rb
+          config_rune_deploy
+        end
+
+      action :update do
+        converge_by("Updating #{ @new_resource.artifact }") do
+end
+    end
   end
+end
