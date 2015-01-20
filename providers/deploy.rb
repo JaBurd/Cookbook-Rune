@@ -28,7 +28,13 @@ class Chef
        end
      end
 
+    action :delete do
+      converge_by("Delete #{ @new_resource.artifact}") do
+      # Delete artifact in artifactory from helpers.rb
+        delete_rune_artifact
+      end
     end
+
   end
 end
 
