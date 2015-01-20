@@ -31,7 +31,9 @@ class Chef
 
       action :update do
         converge_by("Updating #{ @new_resource.artifact }") do
-end
+          update_rune_config
+        end
+      end
     end
   end
 end
