@@ -17,8 +17,44 @@ class Chef
           artifact.download(new_resource.target)
         end
 
+        # Deletes the artifact from artifactory,
+        # Placeholder until delete function needed.
+        #
+        # @param [String] target
+        # Deletes the artifact from the endpoint.
+        #
+        # PLACEHOLDER
+        # PLACEHOLDER
+        # PLACEHOLDER
+
+        # Configures Artifactory Connection
+        # configuration for API calls
+        #
+        # @param [String] endpoint
+        # The endpoint for the Artifactory server
+        # @param [String] username
+        # @param [String] password
+        # The basic authentication information. Since this uses HTTP
+        # Basic Auth, it is highly recommended that you run Artifactory
+        # over SSL.
+        # @param [String] ssl_pem_file
+        # Specified path to a pem file with your custom
+        # certificates. Must be a valid Cert.
+        # @param [String] ssl_verify
+        # for disabling ssl verification if you feelin cray cray
+
+        def config_rune_deploy
+          Artifactory.configure do |config|
+            config.endpoint = new_resource.endpoint
+            config.username = new_resource.username
+            config.password = new_resource.password
+            config.ssl_pem_file = new_resource.ssl_pem_file
+            config.ssl_verify = new_resource.ssl_verify
+          end
+        end
+
       # The following method is a placeholder. Once the requirement of
-      # a full installation of the gem is required. Which, is very likely
+      # a full installation of the gem is required. Which, is very likely.
 
       def gem_binary
         if File.exists?("/opt/chef/embedded/bin/gem")
