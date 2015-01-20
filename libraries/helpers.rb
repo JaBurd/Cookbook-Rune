@@ -51,6 +51,10 @@ class Chef
             config.ssl_pem_file = new_resource.ssl_pem_file
             config.ssl_verify = new_resource.ssl_verify
           end
+          unless repo.exists?
+            repo = Repository.find(name: @new_resource.repo)
+            repo.save
+          end
         end
 
         # Updates Artifactory connection configuration
