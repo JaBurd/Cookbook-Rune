@@ -108,6 +108,19 @@ class Chef
         missing_ok ? nil : raise(error)
       end
 
+      # Method for defining a resource
+      #
+      #
+      #
+
+      def load_current_resource
+        sha = Digest::SHA1.hexdigest new_resource.location
+        @extension = new_resource.location.match(/[:\.]([0-9a-z]+)$/i)[1]
+        @file_name = "#{new_resource.name}-#{sha}.#{@extension}"
+        @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
+        @current_resource
+      end
+
     end
   end
 end

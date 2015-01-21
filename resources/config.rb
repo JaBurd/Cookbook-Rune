@@ -14,7 +14,7 @@ class Chef
       attribute :ssl_pem_file, kind_of: String
       attribute :ssl_verify, kind_of: String, default: 'mysql'
       attribute :repo, kind_of: String, required: true
-      
+
       include Rune::Helpers
     end
   end
