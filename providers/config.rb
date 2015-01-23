@@ -1,39 +1,41 @@
 #
 # Cookbook Name:: Rune
-# Provider:: deploy
+# Provider:: config
 #
 # Author:: Ian Henry (<ianjhenry00@gmail.com>)
 #
 # Copyright 2015
 #
-require 'digest'
-require 'pathname'
-require 'yaml'
 require 'chef/provider/lwrp_base'
-require_relative 'helpers'
-require 'artifactory'
+require_relative '../libraries/helpers'
 
-class Chef
-  class Provider
-    class RuneConfig < Chef::Provider::LWRPBase
-      include Artifactory::Resource
+#require 'artifactory'
+#class Chef
+#  class Provider
+#    class RuneConfig < ::Chef::Provider::LWRPBase
       include Rune::Helpers
+#      include Artifactory::Resource
+
+      use_inline_resources if defined?(use_inline_resources)
 
       def whyrun_supported?
         true
       end
 
-      action :config do
-        converge_by("Configure #{ @new_resource.artifact }") do
+      action :create do
+        converge_by("Configure #{ @new_resource.endpoint }") do
           # Configure client xml from helpers.rb
-          config_rune_deploy
+          gem_install
+#          include Artifactory::Resource
+          set_rune_config
         end
+      end
 
       action :update do
         converge_by("Updating #{ @new_resource.artifact }") do
           update_rune_config
         end
       end
-    end
-  end
-end
+#    end
+#  end
+#end

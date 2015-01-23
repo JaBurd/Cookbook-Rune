@@ -1,9 +1,9 @@
-name             '.\cookbook-artifactory_client'
+name             'rune'
 maintainer       'YOUR_NAME'
 maintainer_email 'YOUR_EMAIL'
 license          'All rights reserved'
-description      'Installs/Configures .\cookbook-artifactory_client'
-long_description 'Installs/Configures .\cookbook-artifactory_client'
+description      'Installs/Configures .\rune'
+long_description 'Installs/Configures .\rune'
 
 version          '0.1.0'
 

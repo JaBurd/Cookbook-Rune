@@ -10,11 +10,11 @@ require 'digest'
 require 'pathname'
 require 'yaml'
 require 'chef/provider/lwrp_base'
-require_relative 'helpers'
+require_relative '../libraries/helpers'
 
-class Chef
-  class Provider
-    class RuneDeploy < Chef::Provider::LWRPBase
+#class Chef
+#  class Provider
+#    class RuneDeploy < Chef::Provider::LWRPBase
       include Rune::Helpers
 
       def whyrun_supported?
@@ -34,9 +34,9 @@ class Chef
         delete_rune_artifact
       end
     end
-
-  end
-end
+#  end
+#  end
+#end
 
 
 
