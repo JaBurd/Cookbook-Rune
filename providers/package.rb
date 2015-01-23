@@ -1,7 +1,10 @@
+require_relative '../libraries/helpers'
+include Rune::Helpers
 attr_reader :extension
 attr_reader :file_name
 
-load_current_resource
+
+#load_current_resource
 
 action :install do
 

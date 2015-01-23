@@ -7,11 +7,11 @@
 # Copyright 2015
 #
 require 'chef/provider/lwrp_base'
-require_relative 'helpers'
+require_relative '../libraries/helpers'
 
-class Chef
-  class Provider
-    class RuneUpload < Chef::Provider::LWRPBase
+#class Chef
+#  class Provider
+#    class RuneUpload < Chef::Provider::LWRPBase
       include Rune::Helpers
 
       def whyrun_supported?
