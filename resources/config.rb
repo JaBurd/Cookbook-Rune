@@ -14,8 +14,4 @@
       attribute :ssl_verify, kind_of: [TrueClass, FalseClass], default: false
       attribute :repo, kind_of: String, required: true
 
-#      include Rune::Helpers
       attr_accessor :exists
-#    end
-#  end
-#end

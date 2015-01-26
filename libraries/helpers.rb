@@ -14,8 +14,10 @@ include Artifactory::Resource
       #   artifact is delivered to a temporary directory.
       #
       def deploy_rune_artifact
-        artifact = new_resource.artifact.search(name: "#{ @new_resource.artifact }").first
-        artifact.download(new_resource.target)
+        repo = Repository.find(name: @new_resource.repo)
+        version = Artifact.latest_version(name: "#{ @new_resource.artifact }", group: "#{ @new_resource.artifact }",repo: "#{ repo }")
+        artifact = Artifact.search(name: "#{ @new_resource.artifact }", repos: "#{ @new_resource.repo }", version: "#{ version }").first
+        artifact.download(new_resource.target, filename: new_resource.filename )
       end
 
       # Deletes the artifact from artifactory,
@@ -32,6 +34,7 @@ include Artifactory::Resource
           action :install
         end
       end
+
       # Configures Artifactory Connection
       # configuration for API calls
       #
@@ -56,9 +59,6 @@ include Artifactory::Resource
           config.password = new_resource.password
           config.ssl_pem_file = new_resource.ssl_pem_file
           config.ssl_verify = new_resource.ssl_verify
-        end
-          repo = Repository.find(name: @new_resource.repo)
-          repo.save
         end
       end
 
@@ -117,13 +117,13 @@ include Artifactory::Resource
       #
       # currently a placeholder. not yet in use.
       #
-      #def load_current_resource
-      #  sha = Digest::SHA1.hexdigest new_resource.location
-      #  @extension = new_resource.location.match(/[:\.]([0-9a-z]+)$/i)[1]
-      #  @file_name = "#{new_resource.name}-#{sha}.#{@extension}"
-      #  @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
-      #  @current_resource
-      #end
+ #     def load_current_resource
+ #       sha = Digest::SHA1.hexdigest new_resource.location
+ #       @extension = new_resource.location.match(/[:\.]([0-9a-z]+)$/i)[1]
+ #       @file_name = "#{new_resource.name}-#{sha}.#{@extension}"
+ #       @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
+ #       @current_resource
+ #     end
 
       # Method for uploading an artifact to
       # the artifactory server.
@@ -143,3 +143,4 @@ include Artifactory::Resource
        artifact.upload(new_resource.repo, new_resource.remote_path, new_resource.properties)
       end
     end
+  end

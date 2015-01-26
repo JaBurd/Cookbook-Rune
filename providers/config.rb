@@ -8,34 +8,25 @@
 #
 require 'chef/provider/lwrp_base'
 require_relative '../libraries/helpers'
+include Rune::Helpers
 
-#require 'artifactory'
-#class Chef
-#  class Provider
-#    class RuneConfig < ::Chef::Provider::LWRPBase
-      include Rune::Helpers
-#      include Artifactory::Resource
+use_inline_resources if defined?(use_inline_resources)
 
-      use_inline_resources if defined?(use_inline_resources)
+  def whyrun_supported?
+    true
+  end
 
-      def whyrun_supported?
-        true
-      end
+  action :create do
+    converge_by("Configure #{ @new_resource.endpoint }") do
+  # install artifactory gem on node from helpers.rb
+      gem_install
+  # configure artifactory configuration xml from helpers.rb
+      set_rune_config
+    end
+  end
 
-      action :create do
-        converge_by("Configure #{ @new_resource.endpoint }") do
-          # Configure client xml from helpers.rb
-          gem_install
-#          include Artifactory::Resource
-          set_rune_config
-        end
-      end
-
-      action :update do
-        converge_by("Updating #{ @new_resource.artifact }") do
-          update_rune_config
-        end
-      end
-#    end
-#  end
-#end
+  action :update do
+    converge_by("Updating #{ @new_resource.artifact }") do
+      update_rune_config
+    end
+  end
