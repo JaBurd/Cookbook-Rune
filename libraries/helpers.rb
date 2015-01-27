@@ -5,7 +5,6 @@ include Artifactory::Resource
       include Chef::DSL::IncludeRecipe
       require_relative 'helpers'
 
-
       # Deploys the artifact to a temporary directory by default, or
       # to a specific directory as long as specified.
       #
@@ -20,15 +19,9 @@ include Artifactory::Resource
         artifact.download(new_resource.target, filename: new_resource.filename )
       end
 
-      # Deletes the artifact from artifactory,
-      # Placeholder until delete function needed.
+      # Installs Opscode's Artifactory Gem,
+      # Called during rune_config.
       #
-      # @param [String] target
-      #   Deletes the artifact from the endpoint.
-      #
-      # PLACEHOLDER
-      # PLACEHOLDER
-      # PLACEHOLDER
       def gem_install
         chef_gem 'artifactory' do
           action :install
@@ -52,7 +45,6 @@ include Artifactory::Resource
       #   for disabling ssl verification if you feelin cray cray
       #
       def set_rune_config
-        Artifactory::Resource
         Artifactory.configure do |config|
           config.endpoint = new_resource.endpoint
           config.username = new_resource.username
@@ -74,20 +66,6 @@ include Artifactory::Resource
           client = new_config
         else
           puts "client does not exist use set_rune_config"
-        end
-      end
-
-      # The following method is a placeholder. Once the requirement of
-      # a full installation of the gem is required. Which, is very likely.
-      #
-      def gem_binary
-        if File.exists?("/opt/chef/embedded/bin/gem")
-          "/opt/chef/embedded/bin/gem"
-        elsif
-          File.exists?("/opt/sensu/embedded/bin/gem")
-          "/opt/sensu/embedded/bin/gem"
-        else
-          "gem"
         end
       end
 
@@ -117,13 +95,13 @@ include Artifactory::Resource
       #
       # currently a placeholder. not yet in use.
       #
- #     def load_current_resource
- #       sha = Digest::SHA1.hexdigest new_resource.location
- #       @extension = new_resource.location.match(/[:\.]([0-9a-z]+)$/i)[1]
- #       @file_name = "#{new_resource.name}-#{sha}.#{@extension}"
- #       @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
- #       @current_resource
- #     end
+      #def load_current_resource
+      #  sha = Digest::SHA1.hexdigest new_resource.location
+      #  @extension = new_resource.location.match(/[:\.]([0-9a-z]+)$/i)[1]
+      #  @file_name = "#{new_resource.name}-#{sha}.#{@extension}"
+      #  @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
+      #  @current_resource
+      #end
 
       # Method for uploading an artifact to
       # the artifactory server.
@@ -136,11 +114,13 @@ include Artifactory::Resource
       #   the path where this resource will live in the remote
       #   artifactory repository
       # @param [String] properties
-      #   a list of matrix properties... in case youre using them
+      #   a list of matrix properties... in case you're using them
       #
       def rune_artifact_upload
-       artifact = Artifact.new(local_path: new_resource.local_path)
-       artifact.upload(new_resource.repo, new_resource.remote_path, new_resource.properties)
+       repo = Repository.find(name: new_resource.repo)
+       artifact = Artifact.new(local_path: @new_resource.local_path)
+       artifact.upload("#{ repo }", new_resource.remote_path)
       end
+
     end
   end

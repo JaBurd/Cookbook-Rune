@@ -6,7 +6,6 @@
 #
 # Copyright 2015
 #
-require 'chef/provider/lwrp_base'
 require_relative '../libraries/helpers'
 include Rune::Helpers
 
