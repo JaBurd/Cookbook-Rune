@@ -6,7 +6,6 @@
 #
 # Copyright 2015
 #
-
 begin
   require 'artifactory'
 rescue LoadError => e
