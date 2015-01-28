@@ -12,10 +12,3 @@ include Rune::Helpers
   def whyrun_supported?
     true
   end
-
-  action :upload do
-    converge_by("Upload #{ @new_resource.artifact }") do
-      # Upload artifact from helpers.rb
-      rune_artifact_upload
-    end
-  end

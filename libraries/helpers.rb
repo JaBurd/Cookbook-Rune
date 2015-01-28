@@ -1,23 +1,6 @@
-require 'artifactory'
-include Artifactory::Resource
-  module Rune
+module Rune
     module Helpers
       include Chef::DSL::IncludeRecipe
-      require_relative 'helpers'
-
-      # Deploys the artifact to a temporary directory by default, or
-      # to a specific directory as long as specified.
-      #
-      # @param [String] target
-      #   Pulls down the artifact to a target directory. If not specified
-      #   artifact is delivered to a temporary directory.
-      #
-      def deploy_rune_artifact
-        repo = Repository.find(name: @new_resource.repo)
-        version = Artifact.latest_version(name: "#{ @new_resource.artifact }", group: "#{ @new_resource.artifact }",repo: "#{ repo }")
-        artifact = Artifact.search(name: "#{ @new_resource.artifact }", repos: "#{ @new_resource.repo }", version: "#{ version }").first
-        artifact.download(new_resource.target, filename: new_resource.filename )
-      end
 
       # Installs Opscode's Artifactory Gem,
       # Called during rune_config.
@@ -54,6 +37,27 @@ include Artifactory::Resource
         end
       end
 
+      # Deploys the artifact to a temporary directory by default, or
+      # to a specific directory as long as specified.
+      #
+      # @param [String] target
+      #   Pulls down the artifact to a target directory. If not specified
+      #   artifact is delivered to a temporary directory.
+      #
+      def deploy_rune_artifact
+        repo = Artifactory::Resource::Repository.find(name: @new_resource.repo)
+        version = Artifactory::Resource::Artifact.latest_version(name: "#{ @new_resource.artifact }", group: "#{ @new_resource.artifact }",repo: "#{ repo }")
+        artifact = Artifactory::Resource::Artifact.search(name: "#{ @new_resource.artifact }", repos: "#{ @new_resource.repo }", version: "#{ version }").first
+        artifact.download(new_resource.target, filename: new_resource.filename )
+      end
+
+      def rune_artifact_upload
+        repo = Artifactory::Resource::Repository.find(@new_resource.repo)
+        artifact = Artifactory::Resource::Artifact.new(@new_resource.local_path)
+        repo.upload(new_resource.local_path, new_resource.remote_path)
+      end
+
+
       # Updates Artifactory connection configuration
       # for API calls with existing xml object
       #
@@ -63,7 +67,6 @@ include Artifactory::Resource
       def update_rune_config
         if client.exists?
           new_config = Artifactory::Client.new(endpoint: @new_resource.endpoint, username: @new_resource.username, password: @new_resource.password, ssl_pem_file: @new_resource.ssl_pem_file, ssl_verify: @new_resource.ssl_verify)
-          client = new_config
         else
           puts "client does not exist use set_rune_config"
         end
@@ -116,11 +119,6 @@ include Artifactory::Resource
       # @param [String] properties
       #   a list of matrix properties... in case you're using them
       #
-      def rune_artifact_upload
-       repo = Repository.find(name: new_resource.repo)
-       artifact = Artifact.new(local_path: @new_resource.local_path)
-       artifact.upload("#{ repo }", new_resource.remote_path)
-      end
 
     end
   end
