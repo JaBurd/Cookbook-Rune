@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-gem 'artifactory'
 gem 'berkshelf'
 
 # Uncomment these lines if you want to live on the Edge:
