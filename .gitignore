@@ -9,7 +9,6 @@ pkg/
 .idea/
 .idea/*
 
-
 # Berkshelf
 .vagrant
 /cookbooks
