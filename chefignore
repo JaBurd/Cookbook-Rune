@@ -30,7 +30,7 @@ tmtags
 .project
 .settings
 mkmf.log
-
+.idea
 ## COMPILED ##
 ##############
 a.out

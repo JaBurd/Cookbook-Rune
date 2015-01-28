@@ -1,16 +1,16 @@
+require_relative '../libraries/helpers'
+include Rune::Helpers
 attr_reader :extension
 attr_reader :file_name
 
-def load_current_resource
-  @current_resource = Chef::Resource::ArtifactPackage.new(@new_resource.name)
-  @current_resource
-end
+
+#load_current_resource
 
 action :install do
 
   pkg = ::File.join(Chef::Config[:file_cache_path],
                     "artifact_packages",
-                    file_name)
+                    new_resource.file_name)
 
   directory ::File.dirname(pkg) do
     action :create
@@ -22,9 +22,6 @@ action :install do
     checksum new_resource.checksum if new_resource.checksum
     owner new_resource.owner
     group new_resource.group
-    nexus_configuration nexus_configuration_object if Chef::Artifact.from_nexus?(new_resource.location)
-    download_retries new_resource.download_retries
-    after_download new_resource.after_download
   end
 
   package new_resource.name do

@@ -1,17 +1,18 @@
 #
-# Cookbook Name:: artifactory
-# Resource:: package
+# Cookbook Name:: rune
+# Resource:: upload
 #
 # Author:: Ian Henry (<ianjhenry00@gmail.com>)
 #
 # Copyright 2015
+#
+require 'chef/resource/lwrp_base'
 
-actions :install
+actions :upload
+default_action :upload
 
-default_action :install
-
-attribute :name, :kind_of     => String, :required => true, :name_attribute => true
-attribute :endpoint, :kind_of => String
-attribute :checksum, :kind_of => String
-attribute :owner, :kind_of    => String, :regex => Chef::Config[:user_valid_regex], :default => 'root'
-attribute :group, :kind_of    => String, :regex => Chef::Config[:user_valid_regex], :default => 'root'
+attribute :item, kind_of: String,  name_attribute: true, required: true
+attribute :repo, kind_of: String, required: true
+attribute :remote_path, kind_of: String, required: true
+attribute :local_path, kind_of: Array, required: true
+attribute :properties, kind_of: String, default: nil
